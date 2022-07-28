@@ -31,16 +31,24 @@ function setup()
   soloInvisível = createSprite(50,190,50,10);
   soloInvisível.visible = false;
   
+  //gerando números aleatórios
+  var aleatório = Math.round(random(1,61));
+  console.log(aleatório);
 }
 
 //desenho e animação
 function draw()
 {
+
+  //gerando números aleatórios
+  var aleatório = Math.round(random(1,60));
+  console.log(aleatório);
+
   //definir a cor do plano de fundo 
   background("lightgrey");
   
   //registrando a posição y do trex
-  console.log(trex.y);
+  //console.log(trex.y);
   
   //pular quando tecla de espaço for pressionada
   if(keyDown("space") && trex.y >=160)
@@ -64,6 +72,15 @@ function draw()
   //impedir que o trex caia
   trex.collide(soloInvisível);
 
+  //chamada da função que gera nuvens
+  gerarNuvens();
+
   //desenhar os sprites
   drawSprites();
+}
+
+function gerarNuvens(){
+  var nuvem = createSprite(600,50,40,10);
+  nuvem.velocityX = -3;
+  
 }
