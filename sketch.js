@@ -2,12 +2,26 @@
 var trex, trex_running, edges;
 var groundImage;
 var solo, soloInvisível;
-
+var nuvemImage;
+var cactoImage1;
+var cactoImage2;
+var cactoImage3;
+var cactoImage4;
+var cactoImage5;
+var cactoImage6;
+var poin= 0;
 //pré-carregamento das imagens e sons
 function preload()
 {
   trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
   groundImage = loadImage("ground2.png")
+  nuvemImage = loadImage("cloud.png")
+  cactoImage1 = loadImage("obstacle1.png");
+  cactoImage2 = loadImage("obstacle2.png");
+  cactoImage3 = loadImage("obstacle3.png");
+  cactoImage4 = loadImage("obstacle4.png");
+  cactoImage5 = loadImage("obstacle5.png");
+  cactoImage6 = loadImage("obstacle6.png");
 }
 
 function setup()
@@ -42,10 +56,12 @@ function draw()
 
   //gerando números aleatórios
   var aleatório = Math.round(random(1,60));
-  console.log(aleatório);
+  //console.log(aleatório);
+  console.log(frameCount)
+
 
   //definir a cor do plano de fundo 
-  background("lightgrey");
+  background("white");
   
   //registrando a posição y do trex
   //console.log(trex.y);
@@ -74,13 +90,55 @@ function draw()
 
   //chamada da função que gera nuvens
   gerarNuvens();
+  gerarCactos();
 
   //desenhar os sprites
   drawSprites();
+  //pontuacao
+  poin+=Math.round(frameCount/60)
+  text (" pontos "+poin,50,50)
 }
 
-function gerarNuvens(){
+function gerarNuvens()
+{
+  if(frameCount%60==0){
   var nuvem = createSprite(600,50,40,10);
   nuvem.velocityX = -3;
-  
+  nuvem.addImage(nuvemImage);
+  trex.depth =nuvem.depth +1;
+  console.log(trex.depth);
+  console.log(nuvem.depth);
+  nuvem.y = Math.round(random(10,60));
+  nuvem.lifetime = 220;
 }
+}
+
+function gerarCactos()
+{
+  if(frameCount%90==0)
+  {
+    var cacto = createSprite(600,180);
+    cacto.velocityX = -2;
+    cacto.scale = 0.5;
+    var numero = Math.round(random(1,6));
+    switch(numero)
+    {
+      case 1:cacto.addImage(cactoImage1);
+      break;
+      case 2:cacto.addImage(cactoImage2);
+      break;
+      case 3:cacto.addImage(cactoImage3);
+      break;
+      case 4:cacto.addImage(cactoImage4);
+      break;
+      case 5:cacto.addImage(cactoImage5);
+      break;
+      case 6:cacto.addImage(cactoImage6);
+      break;
+      default:break;
+    }
+    cacto.lifetime = 310;
+  }
+}
+
+  
