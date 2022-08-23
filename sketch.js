@@ -51,7 +51,7 @@ function setup()
   createCanvas(windowWidth, windowHeight);
 
   //criando o trex
-  trex = createSprite(50,height/2,20,50);
+  trex = createSprite(50,height/2,20,50);//150
   trex.setCollider("rectangle",0,0,95,50);
   trex.debug=false;
   trex.addAnimation("running", trex_running);
@@ -62,11 +62,12 @@ function setup()
   trex.x = 50
 
   //criando o solo
-  solo = createSprite(300,height/2 + 20,600,10);
+  solo = createSprite(300,height/2 + 20,600,10);//180
   solo.addImage(groundImage);
+  solo.scale = 1.5
 
   //criando um solo invisível
-  soloInvisível = createSprite(50,190,50,10);
+  soloInvisível = createSprite(50,height/2+30,50,10);//190
   soloInvisível.visible = false;
   
   //gerando números aleatórios
@@ -77,11 +78,11 @@ function setup()
   nuvens=new Group ();
   pteros=new Group ();
   //Colocando as imagens restart e gameOver
-  gameOver = createSprite(300,100);
+  gameOver = createSprite(width/2,height/2/2);//x=300,y=100
   gameOver.addImage(imagemGameOver);
   gameOver.scale =0.5;
   gameOver.visible=false;
-  restart = createSprite(300,150);
+  restart = createSprite(width/2,height/2/2+50);//x=300,y=150
   restart.addImage(imagemRestart);
   restart.scale = 0.5;
   restart.visible=false;
@@ -94,7 +95,7 @@ function draw()
   background("white");
   if(gameState==INICIO)
   {
-  text("aperte space para começar",300,100 )
+  text("aperte space para começar",width/2,height/2 )
   if(keyDown("space"))
   {
   gameState=JOGANDO
@@ -103,7 +104,7 @@ function draw()
   else if (gameState==JOGANDO)
   {
    //pular quando tecla de espaço for pressionada
-   if((keyDown("space") || touches.length > 0)&& trex.y >=160)
+   if((keyDown("space") || touches.length > 0)&& trex.y >=height/2+10)//160
    {
      trex.velocityY = -10.5;
      som1.play();
@@ -162,9 +163,10 @@ function draw()
   gameOver.visible=true;
   restart.visible=true;
   trex.velocityY = 0;
-  if(mousePressedOver(restart))
+  if(mousePressedOver(restart)||touches.length>0)
   {
   reset()
+  touches = []
   }
 
   }
@@ -174,21 +176,21 @@ function draw()
 
   //desenhar os sprites
   drawSprites();
-  text (" pontos "+poin,50,50);
+  text (" pontos "+poin,width/2/2,height/2/2);
 }
 
 function gerarNuvens()
 {
   if(frameCount%60==0){
-  var nuvem = createSprite(600,50,40,10);
+  var nuvem = createSprite(width,height/2/2,40,10);
   nuvens.add(nuvem);
   nuvem.velocityX = -3;
   nuvem.addImage(nuvemImage);
   trex.depth =nuvem.depth +1;
   //console.log(trex.depth);
   //console.log(nuvem.depth);
-  nuvem.y = Math.round(random(10,60));
-  nuvem.lifetime = 220;
+  nuvem.y = Math.round(random(height/2-90,height/2-40));//10,60
+  nuvem.lifetime = 550;
 }
 }
 
@@ -196,7 +198,7 @@ function gerarCactos()
 {
   if(frameCount%90==0)
   {
-    var cacto = createSprite(600,180);
+    var cacto = createSprite(width,height/2+10);
     cactos.add(cacto)
     cacto.velocityX = -6-poin/100;
     cacto.scale = 0.5;
@@ -243,9 +245,9 @@ function gerarPteros()
   //if(frameCount === num)
   //if(frameCount%numero === 0)
   {
-  var ptero = createSprite(600,150);
+  var ptero = createSprite(width,height/2+10);
   ptero.addAnimation("ptero",ptero_Animation);
-  ptero.scale = 0.8;
+  ptero.scale = 0.5;
   pteros.add(ptero);
   ptero.velocityX = -6-poin/100;
   ptero.lifetime = 310;
