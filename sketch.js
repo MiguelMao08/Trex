@@ -21,6 +21,7 @@ var imagemGameOver, imagemRestart;
 var som1, som2, som3;
 var ptero,ptero_fly;
 var pteros;
+var ptero_Animation; //NOVO
 //pré-carregamento das imagens e sons
 function preload()
 {
@@ -39,17 +40,18 @@ function preload()
   som1 = loadSound("jump.mp3");
   som2 = loadSound("checkPoint.mp3");
   som3 = loadSound("die.mp3");
-  ptero_fly = loadImage("ptero.png",);
-  
+  //ptero_fly = loadImage("ptero1.png",);
+  ptero_Animation = loadAnimation("ptero1.png", "ptero2.png");
 }
 
 function setup()
 {
   //criando a tela do jogo
-  createCanvas(600,200);
-  
+  //createCanvas(600,200);
+  createCanvas(windowWidth, windowHeight);
+
   //criando o trex
-  trex = createSprite(50,160,20,50);
+  trex = createSprite(50,height/2,20,50);
   trex.setCollider("rectangle",0,0,95,50);
   trex.debug=false;
   trex.addAnimation("running", trex_running);
@@ -60,7 +62,7 @@ function setup()
   trex.x = 50
 
   //criando o solo
-  solo = createSprite(300,180,600,10);
+  solo = createSprite(300,height/2 + 20,600,10);
   solo.addImage(groundImage);
 
   //criando um solo invisível
@@ -69,7 +71,7 @@ function setup()
   
   //gerando números aleatórios
   var aleatório = Math.round(random(1,61));
-  console.log(aleatório);
+  //console.log(aleatório);
   //criando os grupos
   cactos=new Group ();
   nuvens=new Group ();
@@ -101,11 +103,15 @@ function draw()
   else if (gameState==JOGANDO)
   {
    //pular quando tecla de espaço for pressionada
-   if(keyDown("space") && trex.y >=160)
+   if((keyDown("space") || touches.length > 0)&& trex.y >=160)
    {
      trex.velocityY = -10.5;
      som1.play();
     // trex.y = cactos
+    //limpar o touches
+    touches = []; //limpa a matriz, ou seja, não fica nada armazenado nela 
+    // = significa atribuição
+  
    }
    
    //gravidade para o trex
@@ -129,12 +135,12 @@ function draw()
   if(cactos.isTouching(trex)||pteros.isTouching(trex))
   {
     gameState=FIM
-    som3.play()
+    som3.play();
     //trex.velocityY = -10.5;
   }
-  if (poin%1000 ==0&&poin>0)
+  if (poin>0 && poin%100==0)
   {
-    som2.play()
+    som2.play();
   }
   //alerar fundo da tela
   if(poin>=100)
@@ -179,8 +185,8 @@ function gerarNuvens()
   nuvem.velocityX = -3;
   nuvem.addImage(nuvemImage);
   trex.depth =nuvem.depth +1;
-  console.log(trex.depth);
-  console.log(nuvem.depth);
+  //console.log(trex.depth);
+  //console.log(nuvem.depth);
   nuvem.y = Math.round(random(10,60));
   nuvem.lifetime = 220;
 }
@@ -228,12 +234,20 @@ function reset()
 }
 function gerarPteros()
 {
-  if(frameCount%100==0)
+  var numeros = [150,400,500,600,1000,1500];
+  var numero = random(numeros);
+  console.log("frameCount" + frameCount);
+  console.log("numero"+ numero);
+   if(frameCount%150 === 0)
+ // if(frameCount%num === 0)
+  //if(frameCount === num)
+  //if(frameCount%numero === 0)
   {
-  var ptero = createSprite(600,180);
+  var ptero = createSprite(600,150);
+  ptero.addAnimation("ptero",ptero_Animation);
+  ptero.scale = 0.8;
   pteros.add(ptero);
   ptero.velocityX = -6-poin/100;
-  ptero.addImage("ptero",ptero_fly);
   ptero.lifetime = 310;
   }
 }  
