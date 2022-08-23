@@ -96,9 +96,10 @@ function draw()
   if(gameState==INICIO)
   {
   text("aperte space para começar",width/2,height/2 )
-  if(keyDown("space"))
+  if(keyDown("space")|| touches.length>0)
   {
   gameState=JOGANDO
+    touches = [];
   }
   }
   else if (gameState==JOGANDO)
